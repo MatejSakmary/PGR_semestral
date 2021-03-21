@@ -39,7 +39,7 @@ static bool show_another_window = true;
 static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 void timerCallback(int) {
-    glutTimerFunc(30, timerCallback, 0);
+    glutTimerFunc(16.6, timerCallback, 0);
     glutPostRedisplay();
 }
 
@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
 
     glutDisplayFunc(draw);
      
-    glutTimerFunc(30, timerCallback, 0);
+    glutTimerFunc(16.6, timerCallback, 0);
     if (!pgr::initialize(pgr::OGL_VER_MAJOR, pgr::OGL_VER_MINOR))
         pgr::dieWithError("pgr init failed, required OpenGL not supported?");
 
