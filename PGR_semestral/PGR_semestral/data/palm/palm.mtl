@@ -1,0 +1,147 @@
+# Wavefront Object Material File
+# Generated using SpeedTree tools
+
+newmtl Bark_1_Mat
+map_Kd Bark_1.png
+map_d 
+map_bump Bark_1_Normal.png
+bump Bark_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Bark_2_Mat
+map_Kd Bark_2.png
+map_d 
+map_bump Bark_2_Normal.png
+bump Bark_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Dead_Leaf_1_Mat
+map_Kd Dead_Leaf_1.png
+map_d Dead_Leaf_1_Opacity.png
+map_bump Dead_Leaf_1_Normal.png
+bump Dead_Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Dead_Leaf_1_v2_Mat
+map_Kd Dead_Leaf_1_v2.png
+map_d Dead_Leaf_1_Opacity.png
+map_bump Dead_Leaf_1_Normal.png
+bump Dead_Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Dead_Leaf_1_v3_Mat
+map_Kd Dead_Leaf_1_v3.png
+map_d Dead_Leaf_1_Opacity.png
+map_bump Dead_Leaf_1_Normal.png
+bump Dead_Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Dead_Leaf_1_v4_Mat
+map_Kd Dead_Leaf_1_v4.png
+map_d Dead_Leaf_1_Opacity.png
+map_bump Dead_Leaf_1_Normal.png
+bump Dead_Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Dead_Leaf_2_Mat
+map_Kd Dead_Leaf_2.png
+map_d Dead_Leaf_2_Opacity.png
+map_bump Dead_Leaf_2_Normal.png
+bump Dead_Leaf_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_1_Mat
+map_Kd Leaf_1.png
+map_d Leaf_1_Opacity.png
+map_bump Leaf_1_Normal.png
+bump Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_1_v2_Mat
+map_Kd Leaf_1_v2.png
+map_d Leaf_1_Opacity.png
+map_bump Leaf_1_Normal.png
+bump Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_1_v3_Mat
+map_Kd Leaf_1_v3.png
+map_d Leaf_1_Opacity.png
+map_bump Leaf_1_Normal.png
+bump Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_1_v4_Mat
+map_Kd Leaf_1_v4.png
+map_d Leaf_1_Opacity.png
+map_bump Leaf_1_Normal.png
+bump Leaf_1_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_2_Mat
+map_Kd Leaf_2.png
+map_d Leaf_2_Opacity.png
+map_bump Leaf_2_Normal.png
+bump Leaf_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_2_v2_Mat
+map_Kd Leaf_2_v2.png
+map_d Leaf_2_Opacity.png
+map_bump Leaf_2_Normal.png
+bump Leaf_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_2_v3_Mat
+map_Kd Leaf_2_v3.png
+map_d Leaf_2_Opacity.png
+map_bump Leaf_2_Normal.png
+bump Leaf_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Leaf_2_v4_Mat
+map_Kd Leaf_2_v4.png
+map_d Leaf_2_Opacity.png
+map_bump Leaf_2_Normal.png
+bump Leaf_2_Normal.png -bm 1
+Ns 128
+illum 2
+
+
+newmtl Twig_Mat
+map_Kd Twig.png
+map_d 
+map_bump Twig_Normal.png
+bump Twig_Normal.png -bm 1
+Ns 128
+illum 2
+
+

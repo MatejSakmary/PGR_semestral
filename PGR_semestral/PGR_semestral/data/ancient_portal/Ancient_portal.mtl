@@ -1,0 +1,42 @@
+# Blender MTL File: 'Ancient portal.blend'
+# Material Count: 3
+
+newmtl METAL
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.186364 0.186364 0.186364
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 10.000000 /Volumes/Transcend/Стартапы/SCENERON/Textures/Metal008_4K-JPG/Metal008_4K_Normal.jpg
+map_Kd /Volumes/Transcend/Стартапы/SCENERON/Textures/Metal008_4K-JPG/Metal008_4K_Color.jpg
+map_Ns /Volumes/Transcend/Стартапы/SCENERON/Textures/Metal008_4K-JPG/Metal008_4K_Roughness.jpg
+refl /Volumes/Transcend/Стартапы/SCENERON/Textures/Metal008_4K-JPG/Metal008_4K_Roughness.jpg
+
+newmtl ROCK
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump -bm 10.000000 /Volumes/Transcend/Стартапы/SCENERON/Textures/Ground022_4K-JPG/Ground022_4K_Normal.jpg
+map_Kd /Volumes/Transcend/Стартапы/SCENERON/Textures/Ground022_4K-JPG/Ground022_4K_Color.jpg
+map_Ns /Volumes/Transcend/Стартапы/SCENERON/Textures/Ground022_4K-JPG/Ground022_4K_Roughness.jpg
+
+newmtl STEPS
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.690909 0.690909 0.690909
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Bump /Volumes/Transcend/Стартапы/SCENERON/Textures/Rock020_2K-PNG/Rock020_2K_Normal.png
+map_Kd /Volumes/Transcend/Стартапы/SCENERON/Textures/Rock020_2K-PNG/Rock020_2K_Color.png
+map_Ns /Volumes/Transcend/Стартапы/SCENERON/Textures/Rock020_2K-PNG/Rock020_2K_Roughness.png

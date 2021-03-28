@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!-- Generated using SpeedTree tools -->
+<Materials Count="16" Mesh="Palm1.obj" FlipOpacity="0">
+	<Material ID="4" Name="Bark_1_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Map Name="Color" File="Bark_1.png" />
+		<Map Name="Normal" File="Bark_1_Normal.png" />
+		<Map Name="Gloss" File="Bark_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="AO" File="Bark_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="3" Name="Bark_2_Mat" TwoSided="0" UserData="" VertexOpacity="0">
+		<Map Name="Color" File="Bark_2.png" />
+		<Map Name="Normal" File="Bark_2_Normal.png" />
+		<Map Name="Gloss" File="Bark_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="AO" File="Bark_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="5" Name="Dead_Leaf_1_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Dead_Leaf_1.png" />
+		<Map Name="Opacity" File="Dead_Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Dead_Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Dead_Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Dead_Leaf_1_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Dead_Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Dead_Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="1005" Name="Dead_Leaf_1_v2_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Dead_Leaf_1_v2.png" />
+		<Map Name="Opacity" File="Dead_Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Dead_Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Dead_Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Dead_Leaf_1_v2_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Dead_Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Dead_Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="2005" Name="Dead_Leaf_1_v3_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Dead_Leaf_1_v3.png" />
+		<Map Name="Opacity" File="Dead_Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Dead_Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Dead_Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Dead_Leaf_1_v3_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Dead_Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Dead_Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="3005" Name="Dead_Leaf_1_v4_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Dead_Leaf_1_v4.png" />
+		<Map Name="Opacity" File="Dead_Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Dead_Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Dead_Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Dead_Leaf_1_v4_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Dead_Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Dead_Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="7" Name="Dead_Leaf_2_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Dead_Leaf_2.png" />
+		<Map Name="Opacity" File="Dead_Leaf_2_Opacity.png" />
+		<Map Name="Normal" File="Dead_Leaf_2_Normal.png" />
+		<Map Name="Gloss" File="Dead_Leaf_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Dead_Leaf_2_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Dead_Leaf_2_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Dead_Leaf_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="1" Name="Leaf_1_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_1.png" />
+		<Map Name="Opacity" File="Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_1_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="1001" Name="Leaf_1_v2_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_1_v2.png" />
+		<Map Name="Opacity" File="Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_1_v2_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="2001" Name="Leaf_1_v3_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_1_v3.png" />
+		<Map Name="Opacity" File="Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_1_v3_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="3001" Name="Leaf_1_v4_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_1_v4.png" />
+		<Map Name="Opacity" File="Leaf_1_Opacity.png" />
+		<Map Name="Normal" File="Leaf_1_Normal.png" />
+		<Map Name="Gloss" File="Leaf_1_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_1_v4_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_1_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_1_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="2" Name="Leaf_2_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_2.png" />
+		<Map Name="Opacity" File="Leaf_2_Opacity.png" />
+		<Map Name="Normal" File="Leaf_2_Normal.png" />
+		<Map Name="Gloss" File="Leaf_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_2_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_2_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="1002" Name="Leaf_2_v2_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_2_v2.png" />
+		<Map Name="Opacity" File="Leaf_2_Opacity.png" />
+		<Map Name="Normal" File="Leaf_2_Normal.png" />
+		<Map Name="Gloss" File="Leaf_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_2_v2_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_2_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="2002" Name="Leaf_2_v3_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_2_v3.png" />
+		<Map Name="Opacity" File="Leaf_2_Opacity.png" />
+		<Map Name="Normal" File="Leaf_2_Normal.png" />
+		<Map Name="Gloss" File="Leaf_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_2_v3_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_2_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="3002" Name="Leaf_2_v4_Mat" TwoSided="1" UserData="" VertexOpacity="0">
+		<Mesh Name="Leaf_1 Cutout" />
+		<Map Name="Color" File="Leaf_2_v4.png" />
+		<Map Name="Opacity" File="Leaf_2_Opacity.png" />
+		<Map Name="Normal" File="Leaf_2_Normal.png" />
+		<Map Name="Gloss" File="Leaf_2_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="SubsurfaceColor" File="Leaf_2_v4_SubsurfaceColor.png" />
+		<Map Name="SubsurfaceAmount" File="Leaf_2_SubsurfaceAmount.png" />
+		<Map Name="AO" File="Leaf_2_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+	<Material ID="6" Name="Twig_Mat" TwoSided="0" UserData="" VertexOpacity="0">
+		<Map Name="Color" File="Twig.png" />
+		<Map Name="Normal" File="Twig_Normal.png" />
+		<Map Name="Gloss" File="Twig_Gloss.png" />
+		<Map Name="Specular" ColorR="0.75" ColorG="0.75" ColorB="0.75" />
+		<Map Name="AO" File="Twig_AO.png" />
+		<Map Name="Custom" ColorR="0" ColorG="0" ColorB="0" />
+	</Material>
+</Materials>
