@@ -4,13 +4,13 @@ Camera::Camera(glm::vec3 position, glm::vec3 direction, glm::vec3 up) {
 	this->m_position = position;
 	this->m_front = direction;
 	this->m_up = up;
-	this->m_speed = 2.5f;
+	this->m_speed = 3.5f;
 	this->yaw = -90.0f;
 	this->pitch = 0.0f;
 	this->sensitivity = 0.08f;
 }
 
-glm::mat4* Camera::getViewMatrix() {
+glm::mat4 Camera::getViewMatrix() {
 	glm::mat4* view = new glm::mat4();
 	glm::vec3 direction;
 
@@ -18,8 +18,8 @@ glm::mat4* Camera::getViewMatrix() {
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	m_front = glm::normalize(direction);
-	*view = glm::lookAt(m_position, m_position + m_front, m_up);
-	return  view;
+
+	return glm::lookAt(m_position, m_position + m_front, m_up);
 }
     
 void Camera::forward(float deltaTime) {

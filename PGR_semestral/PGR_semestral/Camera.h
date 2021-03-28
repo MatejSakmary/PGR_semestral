@@ -21,6 +21,6 @@ public:
 	void left(float deltaTime);
 	void right(float deltaTime);
 	void updateFrontVec(float xoffset, float yoffset);
-	glm::mat4* getViewMatrix();
+	glm::mat4 getViewMatrix();
 };
 

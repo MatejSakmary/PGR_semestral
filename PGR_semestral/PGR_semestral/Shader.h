@@ -4,6 +4,10 @@
 typedef struct _commonShaderProgram {
 	GLuint program;
 	GLint posLocation;
-	GLint colorLocation;
+	GLint normalLocation;
+
 	GLint PVMmatrixLocation;
+	GLint ModelLocation;
+	GLint NormalModelLocation;
+	GLint lightLocation;
 } SCommonShaderProgram;

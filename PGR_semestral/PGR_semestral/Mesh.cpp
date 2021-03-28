@@ -1,7 +1,35 @@
 #include "Mesh.h"
 
 Mesh::Mesh(const std::string& filename) {
-	
+	if (loadSingleMesh(filename) != true) {
+		std::cerr << "MESH CONSTRUCTOR::ERROR MESHLOADING FAILED";
+	}
+	CHECK_GL_ERROR();
+}
+
+void Mesh::linkShader(SCommonShaderProgram& shader) {
+	CHECK_GL_ERROR();
+
+	glUseProgram(shader.program);
+
+	glEnableVertexAttribArray(shader.posLocation);
+	glVertexAttribPointer(shader.posLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(shader.normalLocation);
+	glVertexAttribPointer(shader.normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)(3 * sizeof(float) * this->numVerticies));
+
+	glBindVertexArray(0);
+}
+
+void Mesh::drawMesh(SCommonShaderProgram& shader, Camera* camera, glm::mat4 modelMatrix, glm::mat4 projectionMatrix) {
+	glUseProgram(shader.program);
+
+	glm::mat4 PVM = projectionMatrix * camera->getViewMatrix() * modelMatrix;
+
+	glUniformMatrix4fv(shader.PVMmatrixLocation, 1, GL_FALSE, glm::value_ptr(PVM));
+
+	glBindVertexArray(this->vertexArrayObject);
+	glDrawElements(GL_TRIANGLES, this->numTriangles * 3, GL_UNSIGNED_INT, 0);
 }
 
 bool Mesh::loadSingleMesh(const std::string& fileName) {
@@ -94,20 +122,9 @@ bool Mesh::loadSingleMesh(const std::string& fileName) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (this)->elementBufferObject); // bind our element array buffer (indices) to vao
 	glBindBuffer(GL_ARRAY_BUFFER, (this)->vertexBufferObject);
 
-	CHECK_GL_ERROR();
-	glEnableVertexAttribArray(shader.posLocation);
-	glVertexAttribPointer(shader.posLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	//glDisableVertexAttribArray(shader.colorLocation);
-	CHECK_GL_ERROR();
-	// following line is problematic on AMD/ATI graphic cards
-	// -> if you see black screen (no objects at all) than try to set color manually in vertex shader to see at least something
-	//glVertexAttrib3f(shader.colorLocation, color.r, color.g, color.b);
-	CHECK_GL_ERROR();
-
-	glBindVertexArray(0);
 
 	(this)->numTriangles = mesh->mNumFaces;
+	this->numVerticies = mesh->mNumVertices;
 
 	return true;
 }

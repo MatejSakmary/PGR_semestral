@@ -26,9 +26,11 @@ typedef struct MeshGeometry {
 } MeshGeometry;
 
 Camera* camera = NULL;
-MeshGeometry* rockGeometry;
+Mesh* rockGeometry = NULL;
+Mesh* groundGeometry = NULL;
 SCommonShaderProgram shaderProgram;
 const char* ROCK_MODEL_NAME = "data/rock_monolyth/mesh/magic_idol_mesh.FBX";
+const char* FLOOR_MODEL_NAME = "data/floor/floor.FBX";
 
 const int WIN_WIDTH = 1080;
 const int WIN_HEIGHT = 1080;
@@ -248,14 +250,26 @@ void init() {
       0
     };
 
+	CHECK_GL_ERROR();
     shaderProgram.program = pgr::createProgram(shaders);
 	shaderProgram.posLocation = glGetAttribLocation(shaderProgram.program, "position");
-	shaderProgram.PVMmatrixLocation = glGetUniformLocation(shaderProgram.program, "PVMmatrix");
+	shaderProgram.normalLocation = glGetAttribLocation(shaderProgram.program, "aNormal");
 
-	if (loadSingleMesh(ROCK_MODEL_NAME, shaderProgram, &rockGeometry) != true) {
+	shaderProgram.PVMmatrixLocation = glGetUniformLocation(shaderProgram.program, "PVMmatrix");
+	shaderProgram.ModelLocation = glGetUniformLocation(shaderProgram.program, "Model");
+	shaderProgram.NormalModelLocation = glGetUniformLocation(shaderProgram.program, "NormalModel");
+	shaderProgram.lightLocation = glGetUniformLocation(shaderProgram.program, "lightPos");
+	CHECK_GL_ERROR();
+
+	rockGeometry = new Mesh(ROCK_MODEL_NAME);
+	rockGeometry->linkShader(shaderProgram);
+
+	groundGeometry = new Mesh(FLOOR_MODEL_NAME);
+	rockGeometry->linkShader(shaderProgram);
+	/*if (loadSingleMesh(ROCK_MODEL_NAME, shaderProgram, &rockGeometry) != true) {
 		std::cerr << "Rock model loading failed";
 	}
-	CHECK_GL_ERROR();
+	CHECK_GL_ERROR();*/
 }
 
 void draw() {
@@ -272,20 +286,36 @@ void draw() {
     ImGui::Render();
 
 
-    glUseProgram(shaderProgram.program);
-	glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.f,0.1f, 100.0f);
+	glm::mat4 modelMatrix;
+	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.f,0.1f, 100.0f);
+	modelMatrix = glm::mat4(1.0f);
+
+	glUseProgram(shaderProgram.program);
+	glm::mat4 NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	glm::vec3 lightPos = glm::vec3(0.0f, 10.0f, 10.0f);
+
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+	glUniform3fv(shaderProgram.lightLocation, 1, glm::value_ptr(lightPos));
+
+	//rockGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+
 	
-	glm::mat4* viewMatrix = camera->getViewMatrix();
+	for (int i = 0; i < 10; i++) {
+		int x_coord = -2;
+		if (i < 5) x_coord = 2;
 
-	glm::mat4 projectionMatrix = ProjectionMatrix;
-	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -5));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
+		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x_coord, 0, (i % 5)* 2));
+		rockGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+	}
 
-	glm::mat4 PVM = projectionMatrix * (*viewMatrix) * modelMatrix;
-	glUniformMatrix4fv(shaderProgram.PVMmatrixLocation, 1, GL_FALSE, glm::value_ptr(PVM));
-
-    glBindVertexArray(rockGeometry->vertexArrayObject);
-    glDrawElements(GL_TRIANGLES, rockGeometry->numTriangles * 3, GL_UNSIGNED_INT, 0);
+		
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.0f, 0.0f));
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(20.0f, 20.0f, 20.0f));
+	groundGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+	
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glutSwapBuffers();
