@@ -5,8 +5,11 @@
  */
 
 #include "imgui.h"
+#include "Camera.h"
 #include "imgui_impl_glut.h"
 #include "imgui_impl_opengl3.h"
+#include "Mesh.h"
+#include "Shader.h"
 #include <iostream>
 #include "pgr.h"
 
@@ -14,12 +17,6 @@
 #define SCENE_HEIGHT 1.0f
 #define SCENE_DEPTH 1.0f
 
-typedef struct _commonShaderProgram {
-	GLuint program;
-	GLint posLocation;
-	GLint colorLocation;
-	GLint PVMmatrixLocation;
-} SCommonShaderProgram;
 
 typedef struct MeshGeometry {
 	GLuint vertexBufferObject;
@@ -28,6 +25,7 @@ typedef struct MeshGeometry {
 	unsigned int numTriangles;
 } MeshGeometry;
 
+Camera* camera = NULL;
 MeshGeometry* rockGeometry;
 SCommonShaderProgram shaderProgram;
 const char* ROCK_MODEL_NAME = "data/rock_monolyth/mesh/magic_idol_mesh.FBX";
@@ -37,9 +35,11 @@ const int WIN_HEIGHT = 1080;
 const char* WIN_TITLE = "Hello World";
 
 
+static bool firstframe = true;;
+static glm::vec2 mousePos;
 static bool show_demo_window = false;
 static bool show_another_window = true;
-static ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+static ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
 
 void timerCallback(int) {
     glutTimerFunc(16.6, timerCallback, 0);
@@ -49,6 +49,39 @@ void timerCallback(int) {
 void reshapeCallback(int newWidth, int newHeight) {
     glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
 }
+
+void processInput() {
+	ImGuiIO& io = ImGui::GetIO();
+
+	if (firstframe) {
+		mousePos = glm::vec2(io.MousePos.x, io.MousePos.y);
+		firstframe = false;
+	}
+
+	if (io.MousePos.x != mousePos.x || io.MousePos.y != mousePos.y)
+	{
+		float xoffset = io.MousePos.x - mousePos.x;
+		float yoffset = mousePos.y - io.MousePos.y;
+
+		camera->updateFrontVec(xoffset, yoffset);
+
+		glutWarpPointer(io.DisplaySize.x / 2, io.DisplaySize.y / 2);
+		mousePos = glm::vec2(io.DisplaySize.x/2, io.DisplaySize.y/2);
+	}
+	if (io.KeysDown['w']) {
+		camera->forward(io.DeltaTime);
+	}
+	if (io.KeysDown['s']) {
+		camera->back(io.DeltaTime);
+	}
+	if (io.KeysDown['a']) {
+		camera->left(io.DeltaTime);
+	}
+	if (io.KeysDown['d']) {
+		camera->right(io.DeltaTime);
+	}
+}
+
 bool loadSingleMesh(const std::string& fileName, SCommonShaderProgram& shader, MeshGeometry** geometry) {
 	Assimp::Importer importer;
 
@@ -200,7 +233,11 @@ void my_display_code()
 		ImGui::End();
 	}
 }
+
 void init() {
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f),
+				        glm::vec3(0.0f, 0.0f, -1.0f),
+				        glm::vec3(0.0f, 1.0f, 0.0f));
     glClearColor(0.2f, 0.1f, 0.3f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
@@ -224,10 +261,11 @@ void init() {
 void draw() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGLUT_NewFrame();
-
     my_display_code();
 
     ImGuiIO& io = ImGui::GetIO();  
+	processInput();
+	glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -235,23 +273,15 @@ void draw() {
 
 
     glUseProgram(shaderProgram.program);
-	glm::mat4 orthoProjectionMatrix = glm::ortho(
-		-SCENE_WIDTH, SCENE_WIDTH,
-		-SCENE_HEIGHT, SCENE_HEIGHT,
-		-10.0f * SCENE_DEPTH, 10.0f * SCENE_DEPTH
-	);
-	glm::mat4 orthoViewMatrix = glm::lookAt(
-		glm::vec3(0.0f, 0.0f, 1.0f),
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 1.0f, 0.0f)
-	);
+	glm::mat4 ProjectionMatrix = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.f,0.1f, 100.0f);
+	
+	glm::mat4* viewMatrix = camera->getViewMatrix();
 
-	glm::mat4 viewMatrix = orthoViewMatrix;
-	glm::mat4 projectionMatrix = orthoProjectionMatrix;
+	glm::mat4 projectionMatrix = ProjectionMatrix;
 	glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -5));
-	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.5, 0.5, 0.5));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glm::mat4 PVM = projectionMatrix * viewMatrix * modelMatrix;
+	glm::mat4 PVM = projectionMatrix * (*viewMatrix) * modelMatrix;
 	glUniformMatrix4fv(shaderProgram.PVMmatrixLocation, 1, GL_FALSE, glm::value_ptr(PVM));
 
     glBindVertexArray(rockGeometry->vertexArrayObject);
@@ -272,7 +302,7 @@ int main(int argc, char** argv) {
     glutCreateWindow(WIN_TITLE);
 
     glutDisplayFunc(draw);
-     
+
     glutTimerFunc(16.6, timerCallback, 0);
     if (!pgr::initialize(pgr::OGL_VER_MAJOR, pgr::OGL_VER_MINOR))
         pgr::dieWithError("pgr init failed, required OpenGL not supported?");
@@ -285,6 +315,7 @@ int main(int argc, char** argv) {
 
     ImGui::StyleColorsDark();
 
+	glutSetCursor(GLUT_CURSOR_NONE);
     ImGui_ImplGLUT_Init();
     ImGui_ImplGLUT_InstallFuncs();
     ImGui_ImplOpenGL3_Init();
