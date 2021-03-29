@@ -4,13 +4,14 @@
  * \author Tomas Barak
  */
 
+#include <iostream>
 #include "imgui.h"
 #include "Camera.h"
 #include "imgui_impl_glut.h"
 #include "imgui_impl_opengl3.h"
 #include "Mesh.h"
 #include "Shader.h"
-#include <iostream>
+#include "Rock_7.h"
 #include "pgr.h"
 
 #define SCENE_WIDTH 1.0f
@@ -31,6 +32,9 @@ Mesh* groundGeometry = NULL;
 Mesh* portalGeometry = NULL;
 Mesh* rockWallGeometry = NULL;
 Mesh* palmGeometry = NULL;
+Mesh* stoneGeometry = NULL;
+MeshGeometry* manualRockGeometry = NULL;
+
 SCommonShaderProgram shaderProgram;
 
 const char* ROCK_MODEL_NAME = "data/rock_monolyth/mesh/magic_idol_mesh.FBX";
@@ -38,36 +42,45 @@ const char* FLOOR_MODEL_NAME = "data/floor/floor_lod_2.FBX";
 const char* PORTAL_MODEL_NAME = "data/ancient_portal/Ancient_portal.FBX";
 const char* ROCK_WALL_MODEL_NAME = "data/rock_wall/rock_wall.FBX";
 const char* PALM_MODEL_NAME = "data/palm/palm.obj";
+const char* STONE_MODEL_NAME = "data/rocks_1/rocks_1/Rock_7/Rock_7/Rock_7.FBX";
 
 const int WIN_WIDTH = 1080;
 const int WIN_HEIGHT = 1080;
 const char* WIN_TITLE = "Hello World";
 
 
-static bool firstframe = true;;
+static float pressDelay = -1;
+static bool mouseControl = false;
+static bool firstframe = true;
 static glm::vec2 mousePos;
 static bool show_demo_window = false;
 static bool show_another_window = true;
 static ImVec4 clear_color = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
+
+static float light_angle = 0.0f;
 
 void timerCallback(int) {
     glutTimerFunc(16.6, timerCallback, 0);
     glutPostRedisplay();
 }
 
-void reshapeCallback(int newWidth, int newHeight) {
-    glViewport(0, 0, glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT));
-}
-
 void processInput() {
 	ImGuiIO& io = ImGui::GetIO();
+	pressDelay -= io.DeltaTime;
 
+	if (io.KeysDown['q'] && pressDelay < 0)
+	{
+		pressDelay = 0.5f;
+		mouseControl = !mouseControl;
+		if(mouseControl == true) glutSetCursor(GLUT_CURSOR_NONE);
+		else glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+	}
 	if (firstframe) {
 		mousePos = glm::vec2(io.MousePos.x, io.MousePos.y);
 		firstframe = false;
 	}
 
-	if (io.MousePos.x != mousePos.x || io.MousePos.y != mousePos.y)
+	if ((io.MousePos.x != mousePos.x || io.MousePos.y != mousePos.y) && mouseControl)
 	{
 		float xoffset = io.MousePos.x - mousePos.x;
 		float yoffset = mousePos.y - io.MousePos.y;
@@ -76,6 +89,13 @@ void processInput() {
 
 		glutWarpPointer(io.DisplaySize.x / 2, io.DisplaySize.y / 2);
 		mousePos = glm::vec2(io.DisplaySize.x/2, io.DisplaySize.y/2);
+	}
+
+	if (io.KeysDown['2']) {
+		camera->switchToStatic(2);
+	}
+	if (io.KeysDown['1']) {
+		camera->switchToStatic(1);
 	}
 	if (io.KeysDown['w']) {
 		camera->forward(io.DeltaTime);
@@ -89,6 +109,14 @@ void processInput() {
 	if (io.KeysDown['d']) {
 		camera->right(io.DeltaTime);
 	}
+	if (io.KeysDown[' '])
+	{
+		camera->up(io.DeltaTime);
+	}
+	if (io.KeyCtrl)
+	{
+		camera->down(io.DeltaTime);
+	}
 }
 
 void my_display_code()
@@ -99,22 +127,24 @@ void my_display_code()
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
-		static float f = 0.0f;
 		static int counter = 0;
 
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
-		ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-		ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-		ImGui::Checkbox("Another Window", &show_another_window);
+		ImGui::Text("use WASD to move around");
+		ImGui::Text("use SPACE to fly up CTRL to fly downwards");
+		ImGui::Text("press \"Q\" to enable cursor and disable mouse control");  // Display some text (you can use a format strings too)
+		//ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+		ImGui::Checkbox("Camera Parameters", &show_another_window);
 
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		ImGui::SliderFloat("light angle", &light_angle, 0.0f, 360.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
 		ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
 
-		if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-			counter++;
+		if (ImGui::Button("Switch to camera 1"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			camera->switchToStatic(1);
 		ImGui::SameLine();
-		ImGui::Text("counter = %d", counter);
+		if (ImGui::Button("Switch to camera 2"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+			camera->switchToStatic(2);
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
@@ -123,10 +153,17 @@ void my_display_code()
 	// 3. Show another simple window.
 	if (show_another_window)
 	{
-		ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
-		ImGui::Text("Hello from another window!");
-		if (ImGui::Button("Close Me"))
+		glm::vec3 cameraPos = camera->getPos();
+		ImGui::Begin("Camera Parameters", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+		if (ImGui::Button("Close"))
 			show_another_window = false;
+		ImGui::Text("Camera position is");
+		ImGui::Text("x: %f", cameraPos.x);
+		ImGui::SameLine();
+		ImGui::Text("y: %f", cameraPos.y);
+		ImGui::SameLine();
+		ImGui::Text("z: %f", cameraPos.z);
+		ImGui::Text("Yaw: %f   Pitch: %f", camera->getYaw(), camera->getPitch());
 		ImGui::End();
 	}
 }
@@ -168,21 +205,51 @@ void init() {
 	rockWallGeometry = new Mesh(ROCK_WALL_MODEL_NAME);
 	rockWallGeometry->linkShader(shaderProgram);
 
-	palmGeometry = new Mesh(PALM_MODEL_NAME);
-	palmGeometry->linkShader(shaderProgram);
+	stoneGeometry = new Mesh(STONE_MODEL_NAME);
+	stoneGeometry->linkShader(shaderProgram);
+
+	//palmGeometry = new Mesh(PALM_MODEL_NAME);
+	//palmGeometry->linkShader(shaderProgram);
 	/*if (loadSingleMesh(ROCK_MODEL_NAME, shaderProgram, &rockGeometry) != true) {
 		std::cerr << "Rock model loading failed";
 	}
 	CHECK_GL_ERROR();*/
+	// -------------------------------- MANUAL LOAD --------------------------------------------
+	manualRockGeometry = new MeshGeometry;
+
+	CHECK_GL_ERROR();
+	glGenVertexArrays(1, &manualRockGeometry->vertexArrayObject);
+	glBindVertexArray(manualRockGeometry->vertexArrayObject);
+
+	glGenBuffers(1, &manualRockGeometry->vertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, manualRockGeometry->vertexBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * rock_7NVertices, rock_7Vertices, GL_STATIC_DRAW);
+	
+	glGenBuffers(1, &manualRockGeometry->elementBufferObject);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, manualRockGeometry->elementBufferObject);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned) * rock_7NTriangles, rock_7Triangles, GL_STATIC_DRAW);
+	manualRockGeometry->numTriangles = rock_7NTriangles;
+	
+	CHECK_GL_ERROR();
+	//glUseProgram(shaderProgram.program);
+
+	glEnableVertexAttribArray(shaderProgram.posLocation);
+	glVertexAttribPointer(shaderProgram.posLocation, 3, GL_FLOAT, GL_FALSE, 8* sizeof(float), 0);
+
+	glEnableVertexAttribArray(shaderProgram.normalLocation);
+	glVertexAttribPointer(shaderProgram.normalLocation, 3, GL_FLOAT, GL_FALSE, 8* sizeof(float), (void*)(3*sizeof(float)));
+
+	CHECK_GL_ERROR();
+	glBindVertexArray(0);
 }
 
 void draw() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGLUT_NewFrame();
     my_display_code();
-
     ImGuiIO& io = ImGui::GetIO();  
 	processInput();
+
 	glViewport(0, 0, (GLsizei)io.DisplaySize.x, (GLsizei)io.DisplaySize.y);
     glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -190,28 +257,29 @@ void draw() {
     ImGui::Render();
 
 
+	glUseProgram(shaderProgram.program);
 	glm::mat4 modelMatrix;
-	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), 1080.0f / 1080.f,0.1f, 100.0f);
+	glm::mat4 projectionMatrix = glm::perspective(glm::radians(45.0f), io.DisplaySize.x / io.DisplaySize.y,0.1f, 100.0f);
 	modelMatrix = glm::mat4(1.0f);
 
-	glUseProgram(shaderProgram.program);
 	glm::mat4 NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	glm::vec3 lightPos = glm::vec3(20.0f*glm::sin(glm::radians(light_angle)), 20.0f, 20.0f*glm::cos(glm::radians(light_angle)));
 	
 	double time = glutGet(GLUT_ELAPSED_TIME);
-	glm::vec3 lightPos = glm::vec3(10.0f*sin(time/5000), 10.0f, 10.0f*cos(time/5000));
 
 	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 	glUniform3fv(shaderProgram.lightLocation, 1, glm::value_ptr(lightPos));
 
-	//rockGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
-
-	
 	for (int i = 0; i < 10; i++) {
 		int x_coord = -2;
 		if (i < 5) x_coord = 2;
 
 		modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(x_coord, 0, -(i % 5)* 2));
+		NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+
+		glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+		glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 		rockGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 	}
 
@@ -219,18 +287,43 @@ void draw() {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 2.7f, -15.0f));
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(8.0f, 8.0f, 8.0f));
+	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
 
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 	rockWallGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 
 	modelMatrix = glm::mat4(1.0f);
-	palmGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(-5.0f, -1.0f, 2.0f));
+	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+	stoneGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+	//palmGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 	/*
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.0f, 20.0f));
 	modelMatrix = glm::rotate(modelMatrix, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	modelMatrix = glm::scale(modelMatrix, glm::vec3(40.0f, 40.0f, 40.0f));
 	groundGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 	*/
-	
+	//---------------------MANUAL LOAD DRAW-------------------------------------
+	CHECK_GL_ERROR();
+	glUseProgram(shaderProgram.program);
+	CHECK_GL_ERROR();
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(-5.0f, -1.0f, 0.0f));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(0.001, 0.001, 0.001));
+	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	glm::mat4 PVM = projectionMatrix * camera->getViewMatrix() * modelMatrix;
+
+
+	glUniformMatrix4fv(shaderProgram.PVMmatrixLocation, 1, GL_FALSE, glm::value_ptr(PVM));
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+	glBindVertexArray(manualRockGeometry->vertexArrayObject);
+	glDrawElements(GL_TRIANGLES, manualRockGeometry->numTriangles * 3, GL_UNSIGNED_INT, 0);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glutSwapBuffers();
@@ -260,7 +353,6 @@ int main(int argc, char** argv) {
 
     ImGui::StyleColorsDark();
 
-	glutSetCursor(GLUT_CURSOR_NONE);
     ImGui_ImplGLUT_Init();
     ImGui_ImplGLUT_InstallFuncs();
     ImGui_ImplOpenGL3_Init();

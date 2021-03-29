@@ -23,6 +23,7 @@
 //  2018-03-22: Added GLUT Platform binding.
 
 #include "imgui.h"
+#include <stdio.h>
 #include "imgui_impl_glut.h"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -121,7 +122,7 @@ static void ImGui_ImplGLUT_UpdateKeyboardMods()
 void ImGui_ImplGLUT_KeyboardFunc(unsigned char c, int x, int y)
 {
     // Send character to imgui
-    //printf("char_down_func %d '%c'\n", c, c);
+    //printf("char_up_func %d '%c'\n", c, c);
     ImGuiIO& io = ImGui::GetIO();
     if (c >= 32)
         io.AddInputCharacter((unsigned int)c);

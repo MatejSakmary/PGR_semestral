@@ -68,7 +68,7 @@ bool Mesh::loadSingleMesh(const std::string& fileName) {
 	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * sizeof(float) * mesh->mNumVertices, mesh->mVertices);
 	// then store all normals
 	glBufferSubData(GL_ARRAY_BUFFER, 3 * sizeof(float) * mesh->mNumVertices, 3 * sizeof(float) * mesh->mNumVertices, mesh->mNormals);
-
+	
 	// just texture 0 for now
 	float* textureCoords = new float[2 * mesh->mNumVertices];  // 2 floats per vertex
 	float* currentTextureCoord = textureCoords;

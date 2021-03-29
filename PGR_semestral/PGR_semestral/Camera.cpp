@@ -42,3 +42,40 @@ void Camera::updateFrontVec(float xoffset, float yoffset) {
 	if (pitch > 89.0f) pitch = 89.0f;
 	if (pitch < -89.0f) pitch = -89.0f;
 }
+void Camera::up(float deltaTime)
+{
+	this->m_position += m_up * m_speed * deltaTime;
+}
+
+void Camera::down(float deltaTime)
+{
+	this->m_position -= m_up * m_speed * deltaTime;
+}
+
+void Camera::switchToStatic(int i) {
+	switch (i)
+	{
+	case 1:
+		this->m_position = glm::vec3(0.0f, 40.0f, 0.0f);
+		this->pitch = -89.0f;
+		this->yaw = -90.0f;
+		break;
+	case 2:
+		this->m_position = glm::vec3(13.0f, 5.6f, 8.9f);
+		this->pitch = -7.0f;
+		this->yaw = -126.0f;
+		break;
+	default:
+		break;
+	}
+}
+
+glm::vec3 Camera::getPos() {
+	return m_position;
+}
+float  Camera::getPitch() {
+	return pitch;
+}
+float Camera::getYaw() {
+	return yaw;
+}

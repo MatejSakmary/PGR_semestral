@@ -20,7 +20,13 @@ public:
 	void back(float deltaTime);
 	void left(float deltaTime);
 	void right(float deltaTime);
+	void up(float deltaTime);
+	void down(float deltaTime);
+	void switchToStatic(int i);
 	void updateFrontVec(float xoffset, float yoffset);
+	glm::vec3 getPos();
+	float getYaw();
+	float getPitch();
 	glm::mat4 getViewMatrix();
 };
 
