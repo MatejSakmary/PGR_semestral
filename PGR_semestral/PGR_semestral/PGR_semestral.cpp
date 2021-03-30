@@ -13,6 +13,7 @@
 #include "Shader.h"
 #include "Rock_7.h"
 #include "pgr.h"
+#include "Ancient_portal_one_mesh.h"
 
 #define SCENE_WIDTH 1.0f
 #define SCENE_HEIGHT 1.0f
@@ -33,22 +34,29 @@ Mesh* portalGeometry = NULL;
 Mesh* rockWallGeometry = NULL;
 Mesh* palmGeometry = NULL;
 Mesh* stoneGeometry = NULL;
+Mesh* stone2Geometry = NULL;
+
 MeshGeometry* manualRockGeometry = NULL;
+MeshGeometry* manualPortalGeometry = NULL;
 
 SCommonShaderProgram shaderProgram;
 
 const char* ROCK_MODEL_NAME = "data/rock_monolyth/mesh/magic_idol_mesh.FBX";
 const char* FLOOR_MODEL_NAME = "data/floor/floor_lod_2.FBX";
-const char* PORTAL_MODEL_NAME = "data/ancient_portal/Ancient_portal.FBX";
+const char* PORTAL_MODEL_NAME = "data/ancient_portal/Ancient_portal_one_mesh.FBX";
 const char* ROCK_WALL_MODEL_NAME = "data/rock_wall/rock_wall.FBX";
 const char* PALM_MODEL_NAME = "data/palm/palm.obj";
 const char* STONE_MODEL_NAME = "data/rocks_1/rocks_1/Rock_7/Rock_7/Rock_7.FBX";
+const char* STONE2_MODEL_NAME = "data/rock_2/Cliff_Rock_One_FBX.FBX";
 
-const int WIN_WIDTH = 1080;
+const int WIN_WIDTH = 1920;
 const int WIN_HEIGHT = 1080;
 const char* WIN_TITLE = "Hello World";
 
 
+static float xrotation = 224.6;
+static float yrotation = 0;
+static float zrotation = 87.8;
 static float pressDelay = -1;
 static bool mouseControl = false;
 static bool firstframe = true;
@@ -146,6 +154,10 @@ void my_display_code()
 		if (ImGui::Button("Switch to camera 2"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
 			camera->switchToStatic(2);
 
+		ImGui::SliderFloat("portalx angle", &xrotation, 0.0f, 360.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		ImGui::SliderFloat("portaly angle", &yrotation, 0.0f, 360.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		ImGui::SliderFloat("portalz angle", &zrotation, 0.0f, 360.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
@@ -208,6 +220,8 @@ void init() {
 	stoneGeometry = new Mesh(STONE_MODEL_NAME);
 	stoneGeometry->linkShader(shaderProgram);
 
+	stone2Geometry = new Mesh(STONE2_MODEL_NAME);
+	stone2Geometry->linkShader(shaderProgram);
 	//palmGeometry = new Mesh(PALM_MODEL_NAME);
 	//palmGeometry->linkShader(shaderProgram);
 	/*if (loadSingleMesh(ROCK_MODEL_NAME, shaderProgram, &rockGeometry) != true) {
@@ -229,6 +243,33 @@ void init() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, manualRockGeometry->elementBufferObject);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned) * rock_7NTriangles, rock_7Triangles, GL_STATIC_DRAW);
 	manualRockGeometry->numTriangles = rock_7NTriangles;
+	
+	CHECK_GL_ERROR();
+	//glUseProgram(shaderProgram.program);
+
+	glEnableVertexAttribArray(shaderProgram.posLocation);
+	glVertexAttribPointer(shaderProgram.posLocation, 3, GL_FLOAT, GL_FALSE, 8* sizeof(float), 0);
+
+	glEnableVertexAttribArray(shaderProgram.normalLocation);
+	glVertexAttribPointer(shaderProgram.normalLocation, 3, GL_FLOAT, GL_FALSE, 8* sizeof(float), (void*)(3*sizeof(float)));
+
+	CHECK_GL_ERROR();
+	glBindVertexArray(0);
+
+	manualPortalGeometry= new MeshGeometry;
+
+	CHECK_GL_ERROR();
+	glGenVertexArrays(1, &manualPortalGeometry->vertexArrayObject);
+	glBindVertexArray(manualPortalGeometry->vertexArrayObject);
+
+	glGenBuffers(1, &manualPortalGeometry->vertexBufferObject);
+	glBindBuffer(GL_ARRAY_BUFFER, manualPortalGeometry->vertexBufferObject);
+	glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * cube_001NVertices, cube_001Vertices, GL_STATIC_DRAW);
+	
+	glGenBuffers(1, &manualPortalGeometry->elementBufferObject);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, manualPortalGeometry->elementBufferObject);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned) * cube_001NTriangles,cube_001Triangles , GL_STATIC_DRAW);
+	manualPortalGeometry->numTriangles = cube_001NTriangles;
 	
 	CHECK_GL_ERROR();
 	//glUseProgram(shaderProgram.program);
@@ -296,10 +337,19 @@ void draw() {
 	modelMatrix = glm::mat4(1.0f);
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(-5.0f, -1.0f, 2.0f));
 	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	CHECK_GL_ERROR();
+
 	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
 	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
-
 	stoneGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
+
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(5.0f, -1.0f, 2.0f));
+	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+	stone2Geometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 	//palmGeometry->drawMesh(shaderProgram, camera, modelMatrix, projectionMatrix);
 	/*
 	modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, -1.0f, 20.0f));
@@ -324,6 +374,26 @@ void draw() {
 
 	glBindVertexArray(manualRockGeometry->vertexArrayObject);
 	glDrawElements(GL_TRIANGLES, manualRockGeometry->numTriangles * 3, GL_UNSIGNED_INT, 0);
+
+	CHECK_GL_ERROR();
+	glUseProgram(shaderProgram.program);
+	CHECK_GL_ERROR();
+	modelMatrix = glm::mat4(1.0f);
+	modelMatrix = glm::translate(modelMatrix, glm::vec3(-5.0f, -1.0f, 20.0f));
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(xrotation), glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(yrotation), glm::vec3(0.0f, 1.0f, 0.0f));
+	modelMatrix = glm::rotate(modelMatrix, glm::radians(zrotation), glm::vec3(0.0f, 0.0f, 1.0f));
+	modelMatrix = glm::scale(modelMatrix, glm::vec3(10, 10, 10));
+	NormalMatrix = glm::transpose(glm::inverse(modelMatrix));
+	PVM = projectionMatrix * camera->getViewMatrix() * modelMatrix;
+
+
+	glUniformMatrix4fv(shaderProgram.PVMmatrixLocation, 1, GL_FALSE, glm::value_ptr(PVM));
+	glUniformMatrix4fv(shaderProgram.ModelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+	glUniformMatrix4fv(shaderProgram.NormalModelLocation, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+
+	glBindVertexArray(manualPortalGeometry->vertexArrayObject);
+	glDrawElements(GL_TRIANGLES, manualPortalGeometry->numTriangles * 3, GL_UNSIGNED_INT, 0);
 
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glutSwapBuffers();

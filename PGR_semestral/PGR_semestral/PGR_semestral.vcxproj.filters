@@ -54,6 +54,9 @@
     <ClCompile Include="Rock_7.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ancient_portal_one_mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -90,6 +93,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Rock_7.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ancient_portal_one_mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
